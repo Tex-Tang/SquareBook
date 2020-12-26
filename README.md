@@ -1,4 +1,4 @@
-# client
+# Squarebook
 
 ## Project setup
 ```
