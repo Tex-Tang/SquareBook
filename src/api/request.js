@@ -2,7 +2,7 @@ import axios from 'axios'
 import router from '../router/index'
 
 const service = axios.create({
-  baseURL: 'http://localhost:8000/api/',
+  baseURL: 'https://dev.squarebook.my/api/',
   withCredentials: true,
   responseType: 'json',
 })

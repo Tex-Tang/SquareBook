@@ -39,7 +39,7 @@ const store = new Vuex.Store({
     aggregates,
   }
 })
-/*
+
 store.dispatch('loading', true)
 getCategories().then(({ data }) => {
   let categories = data;
@@ -54,6 +54,6 @@ getCategories().then(({ data }) => {
     })
   })
 })
-*/
+
 
 export default store;
