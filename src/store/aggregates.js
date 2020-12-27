@@ -1,20 +1,23 @@
 export default {
   namespaced: true,
   state: () => ({
-    general: {
+    aggregates: {
+      categories: [],
       places: [],
+      activePlaces: [],
     },
     placesMap: {}
   }),
   mutations: {
-    setGeneral(state, general) {
-      state.general = general
-      general.places.forEach(item => {
-        item.disabled = true
-        item.children.forEach(child => {
-          state.placesMap[child.id] = child.name
+    set(state, aggregates) {
+      state.aggregates = aggregates
+      let placesMap = {}
+      aggregates.places.forEach(parent => {
+        parent.areas.forEach(place => {
+          placesMap[place.id] = place.name
         })
       });
+      state.placesMap = placesMap
     }
   },
 }

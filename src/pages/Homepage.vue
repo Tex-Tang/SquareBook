@@ -1,5 +1,6 @@
 <template>
   <div class="homepage">
+    <!-- 
     <v-row>
       <v-col cols="3">
         <form class="pa-4 white bordered">
@@ -64,7 +65,7 @@
           </v-col>
         </v-row>
       </v-col>
-    </v-row>
+    </v-row> -->
   </div>
 </template>
 
@@ -88,55 +89,5 @@ export default {
     page: 0,
     helper: new imageHelper(),
   }),
-  mounted () {
-    db.collection('aggregates')
-      .doc('categories')
-      .onSnapshot(doc => {
-        this.categories = doc.data()['uec-book']
-      })
-    this.$store.dispatch('loading', true)
-    db.collection("items")
-    .orderBy("createdAt", 'desc')
-    .limit(25)
-    .get()
-    .then(async (querySnapshot) => {
-      let items = []
-      console.log(querySnapshot.docs)
-      for(let doc of querySnapshot.docs){
-        const data = doc.data();
-        data.images = await this.helper.getPublicUrl(data.images)
-        items.push({ id: doc.id, ...data })
-      }
-      this.items = items
-      this.$store.dispatch('loading', false)
-    });
-  },
-  methods: {
-    fetch() {
-      this.$store.dispatch('loading', true)
-      db.collection("items")
-        .orderBy("createdAt", 'desc')
-        .where('hand_delivery', 'in', this.search.hand_delivery)
-        .where('post_delivery', 'in', this.search.post_delivery)
-        .startAfter(this.items[this.items.length - 1])
-        .limit(25)
-        .get()
-        .then(async (querySnapshot) => {
-          let items = []
-          console.log(querySnapshot.docs)
-          for(let doc of querySnapshot.docs){
-            const data = doc.data();
-            data.images = await this.helper.getPublicUrl(data.images)
-            items.push({ id: doc.id, ...data })
-          }
-          this.items = items
-          this.$store.dispatch('loading', false)
-        });
-    }
-  }
 }
 </script>
-
-<style style="scss">
-
-</style>
