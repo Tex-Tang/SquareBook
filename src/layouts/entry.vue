@@ -1,10 +1,21 @@
 <template>
-  <v-app id="entry-layout">
-    <div class="entry-form rounded">
-      <logo class="logo"></logo>
-      <router-view></router-view>
-    </div>
-  </v-app>
+  <div id="entry-layout">
+    <v-row no-gutters>
+      <v-col cols="12" :md="6" :lg="5" :xl="4">
+        <div class="entry-form">
+          <router-link to="/">
+            <logo style="width: 70px"/>
+          </router-link>
+          <router-view></router-view>
+        </div>
+      </v-col>
+      <v-col class="hidden-sm-and-down" cols="12" :md="6" :lg="7" :xl="8">
+        <div class="entry-image">
+          <img src="/images/book.svg">
+        </div>
+      </v-col>
+    </v-row>
+  </div>
 </template>
 
 <script>
@@ -17,7 +28,7 @@ export default {
     Logo
   },
   mounted() {
-    if (localStorage.getItem("expectToSignIn")) {
+    if (this.$store.getters['user/isLoggedIn']) {
       this.$router.push('/')
     }
   }
@@ -25,26 +36,23 @@ export default {
 </script>
 
 <style lang="scss">
-#entry-layout .v-application--wrap{
+.entry-image{
   height: 100vh;
-  width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
   background-image: linear-gradient(135deg, #fdfcfb 0%, #e2d1c3 100%);
-}
-
-@media screen and (max-height: 693px) {
-  #entry-layout{
-    height: auto;
+  img{
+    width: 50%;
   }
 }
 
 .entry-form{
-  width: 370px;
-  margin: 1rem;
-  padding: 2.5rem 2rem;
   background-color: white;
+  padding: 6rem;
+  @media screen and (max-width: 500px) {
+    padding: 2rem;
+  }
   .logo{
     width: 5rem;
     height: 5rem;
@@ -55,6 +63,7 @@ export default {
     align-items: center;
     padding: .25rem 1rem;
     margin-bottom: .5rem;
+    text-decoration: none;
     span{
       margin-right: 1rem;
     }
@@ -65,6 +74,7 @@ export default {
     &.google{
       border: solid .05rem #EEEEEE;
       padding: .5rem 1rem;
+      color: rgba($color: #000000, $alpha: .8);
       span{
         background-image: url("/images/google.png");
         background-size: contain;
@@ -75,17 +85,5 @@ export default {
       }
     }
   }
-}
-.v-divider{
-  text-align: center;
-}
-.v-divider::after{
-  background-color: white;
-  color: rgba(0,0,0,.32);
-  display: inline-block;
-  content: attr(data-content);
-  font-size: .8rem;
-  padding: .2rem .4rem;
-  transform: translateY(-1rem);
 }
 </style>
