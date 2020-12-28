@@ -23,6 +23,7 @@
           :items="places()"
           :search="search"
           :value="value"
+          item-children="areas"
           selected-color="primary"
           @input="updateSelections"
           selectable
@@ -40,7 +41,7 @@ export default {
   },
   data: () => ({
     ...mapState({
-      places: state => state.aggregates.general.places
+      places: state => state.aggregates.aggregates.places
     }),
     show: false,
     search: ""

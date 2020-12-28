@@ -16,7 +16,7 @@ export function register(data) {
   })
 }
 
-export function profile() {
+export function getProfile() {
   return request({
     url: '/auth/profile',
     method: 'GET',

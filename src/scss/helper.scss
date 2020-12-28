@@ -18,3 +18,16 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+.v-divider{
+  text-align: center;
+}
+.v-divider::after{
+  background-color: white;
+  color: rgba(0,0,0,.32);
+  display: inline-block;
+  content: attr(data-content);
+  font-size: .8rem;
+  padding: .2rem .4rem;
+  transform: translateY(-1rem);
+}

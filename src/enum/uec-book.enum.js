@@ -1,5 +1,4 @@
-export default {
-  booklist: [
+export const booklist = [
     {
       name: '初中华文(一上)',
       quantity: 1,
@@ -1170,15 +1169,15 @@ export default {
       publisher: '董总',
       year: '2017'
     }
-  ],
-  conditions: [
-    { title: "胶膜未拆，无瑕疵。", value: "全新" },
-    { title: "未包膜，翻阅痕迹不明显，如实体卖场陈列贩卖之书籍。", value: "近全新"},
-    { title: "有使用痕迹，不如新书洁白、小范围瑕疵，如折角、碰撞、污点或泛黄等。", value: "良好" },
-    { title: "有使用痕迹，并因时间因素，有大范围黄、黑斑及瑕疵。", value: "普通" },
-    { title: "印刷褪色、模糊或其它更糟之书况。", value: "差强人意"}
-  ],
-  levels: [
+  ]
+export const conditions = [
+    { id: 1, title: "胶膜未拆，无瑕疵。" , value: "全新" },
+    { id: 2, title: "未包膜，翻阅痕迹不明显，如实体卖场陈列贩卖之书籍。", value: "近全新"},
+    { id: 3, title: "有使用痕迹，不如新书洁白、小范围瑕疵，如折角、碰撞、污点或泛黄等。", value: "良好" },
+    { id: 4, title: "有使用痕迹，并因时间因素，有大范围黄、黑斑及瑕疵。", value: "普通" },
+    { id: 5, title: "印刷褪色、模糊或其它更糟之书况。", value: "差强人意"}
+  ]
+export const levels = [
     { title: "初一", value: "JUEC1" },
     { title: "初二", value: "JUEC2" },
     { title: "初三", value: "JUEC3" },
@@ -1187,8 +1186,7 @@ export default {
     { title: "高二", value: "SUEC2" },
     { title: "SPM" , value: "SPM"   },
     { title: "高三", value: "SUEC3" },
-  ],
-  publishers: [
+  ]
+export const publishers = [
     "学校自编", "董总", "DBP", "JE", "Everbest", "Sasbadi", "Zulfashah"
   ]
-}
