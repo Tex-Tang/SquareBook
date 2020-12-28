@@ -16,7 +16,7 @@ export default {
     }
   },
   actions: {
-    create ({ state }, item) {
+    create ({ state, commit }, item) {
       return new Promise((resolve) => {
         addItem(item).then(({ data }) => {
           if (data.result === true) {
