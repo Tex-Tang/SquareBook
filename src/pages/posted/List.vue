@@ -4,12 +4,12 @@
       + 添加
     </v-btn>
     <v-row>
-      <v-col cols="12" :sm="6" v-for="item in items()" :key="item.id">
+      <v-col cols="12" :sm="6" v-for="item in items().data" :key="item.id">
         <v-card elevation="0" class="bordered rounded">
           <div class="pa-4">
             <v-row no-gutters>
               <v-col cols="4">
-                <v-img aspect-ratio="1" :src="item.images[0][400]"></v-img>
+                <v-img aspect-ratio="1" :src="item.images[0].path"></v-img>
               </v-col>
               <v-col cols="8">
                 <div class="pl-4">
@@ -21,7 +21,7 @@
                       name: 'post-edit', 
                       params: { 
                         category: item.category, 
-                        id: item.id 
+                        uuid: item.uuid 
                       }
                     }" color="primary" depressed>编辑</v-btn>
                     <v-btn class="ml-2" @click="deleteItem(item)" color="error" depressed>删除</v-btn>
@@ -51,26 +51,9 @@ export default {
   }),
   mounted () {
     this.$store.dispatch('loading', true)
-    const imageHelper = new ImageUpload()
-    firebase.auth().onAuthStateChanged((user) => {
-      if (user) {
-        this.unsubscribe = this.$db.collection('items')
-        .where('status', 'in', [ItemStatus.Active, ItemStatus.Inactive])
-        .where('createdBy.uid', '==', user.uid)
-        .onSnapshot(async querySnapshot => {
-          let docs = []
-          for (let doc of querySnapshot.docs) {
-            const data = doc.data()
-            data.images = await imageHelper.getPublicUrl(data.images)
-            docs.push({ id: doc.id, ...data })
-          }
-          this.$store.commit('posted/set', docs)
-          this.$store.dispatch('loading', false)
-        })
-      } else {
-        this.$router.push("/login")
-      }
-    });
+    this.$store.dispatch('posted/getAll').then((res) => {
+      this.$store.dispatch('loading', false)
+    })
   },
   methods: {
     deleteItem (item) {
@@ -81,8 +64,5 @@ export default {
       })
     }
   },
-  destroyed() {
-    this.unsubscribe()
-  }
 }
 </script>

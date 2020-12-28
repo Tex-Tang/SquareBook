@@ -23,26 +23,12 @@
                   id="image">
               </label>
             </v-col>
-            <v-col cols="12" :sm="4" :md="12" :lg="6" v-for="(image, ind) in images" :key="'image' + ind">
-              <div class="relative uploaded-photo">
-                <v-img
-                  :loading="loading"
-                  :aspect-ratio="1"
-                  :src="image[400] ? image[400] : image.thumb"
-                ></v-img>
-                <div class="action-wrapper">
-                  <div class="remove-photo-icon" @click="images.splice(ind, 1)">
-                    <span class="mdi mdi-close text-h4 red--text"></span>
-                  </div>
-                </div>
-              </div>
-            </v-col>
             <v-col cols="12" :sm="4" :md="12" :lg="6" v-for="(image, ind) in item.images" :key="'old-image' + ind">
               <div class="relative uploaded-photo">
                 <v-img
                   :loading="loading"
                   :aspect-ratio="1"
-                  :src="image[400] ? image[400] : image.thumb"
+                  :src="image.path ? image.path : image.thumb"
                 ></v-img>
                 <div class="action-wrapper">
                   <div class="remove-photo-icon" @click="item.images.splice(ind, 1)">
@@ -67,9 +53,9 @@
               </v-col>
               <!-- Title -->
               <v-col cols="12" :sm="8">
-                <validation-provider v-slot="{ errors }" name="标题" rules="required|max:20">
+                <validation-provider v-slot="{ errors }" name="标题" rules="required|min:5|max:20">
                   <v-text-field
-                    v-model="item.title"
+                    v-model="item.name"
                     :counter="20"
                     label="标题"
                     placeholder="取个吸引人的标题吧！"
@@ -163,12 +149,19 @@
               </v-col>
             </v-row>
             <component 
-              :is="$route.params.category"
+              :is="item.category + '-properties'"
               ref="propertiesForm"
               v-model="item.properties"
               :loading="loading">
             </component>
             <!-- Submit btn -->
+
+            <component 
+              :is="item.category + '-content'"
+              ref="contentForm"
+              v-model="item.content"
+              :loading="loading">
+            </component>
             <v-row>
               <v-col cols="12" class="text-right">
                 <v-btn :loading="loading" type="submit" color="primary" depressed>提交</v-btn>
@@ -189,21 +182,24 @@ import PlaceSelectionDialog from '../../components/forms/PlacesSelectionDialog'
 
 export default {
   components: {
-    'uec-book': UECBook,
+    'uec-book-properties': () => import('../../components/forms/uecbook/properties'),
+    'uec-book-content': () => import('../../components/forms/uecbook/content'),
     PlaceSelectionDialog
   },
   data: () => ({
     loading: false,
     images: [],
-    id: "",
+    uuid: "",
     item: {
-      title: "",
+      name: "Test",
       price: "0.00",
-      category: "",
-      description: "",
-      hand_delivery: [],
-      post_delivery: [],
-      properties: {}
+      category: "uec-book",
+      description: "Test",
+      hand_delivery: [509],
+      post_delivery: [510],
+      properties: {},
+      content: [],
+      images: []
     },
     trade: {
       post: {
@@ -222,12 +218,12 @@ export default {
     })
   }),
   mounted () {
-    if (this.$route.params.id) {
+    if (this.$route.params.uuid) {
       this.$store.dispatch('loading', true)
-      this.$store.dispatch('posted/getById', this.$route.params.id).then(({ success, data }) => {
-        if (success) { 
+      this.$store.dispatch('posted/getById', this.$route.params.uuid).then(({ result, data }) => {
+        if (result) { 
           this.item = cloneDeep(data)
-          this.id = this.$route.params.id
+          this.uuid = this.$route.params.uuid
         } else {
           this.$router.push({ name: 'posted' })
         }
@@ -246,7 +242,7 @@ export default {
       }
       let thumb = URL.createObjectURL(file)
       if (thumb && file.type.substr(0, 6) === 'image/') {
-        this.images.push({
+        this.item.images.push({
           thumb,
           file,
         })
@@ -276,34 +272,32 @@ export default {
       if (messages.length !== 0) {
         this.$store.dispatch('alert', {
           type: "error",
-          messages: messages.join("\n"),
+          message: messages.join("\n"),
         })
         return;
       }
 
-      this.$store.dispatch('loading', true)
-      if (!this.id) {
-        this.$store.dispatch('posted/create', { 
-          item: this.item, 
-          images: this.images
-        }).then(res => {
-          this.$store.dispatch('alert', {
-            type: "success",
-            messages: "成功添加物品，预祝早日找到新主人。"
-          })
-          this.$router.push({ name: 'posted' })
+      //this.$store.dispatch('loading', true)
+      if (!this.uuid) {
+        this.$store.dispatch('posted/create', this.item).then(data => {
+          if (data.result === true) {
+            this.$store.dispatch('alert', {
+              type: "success",
+              message: "成功创建物品，预祝早日找到新主人。"
+            })
+            this.$router.push({ name: 'posted' })
+          }
           this.$store.dispatch('loading', false)
         })
       } else {
-        this.$store.dispatch('posted/edit', { 
-          item: this.item, 
-          images: this.images
-        }).then(res => {
-          this.$store.dispatch('alert', {
-            type: "success",
-            messages: "成功编辑物品，预祝早日找到新主人。"
-          })
-          this.$router.push({ name: 'posted' })
+        this.$store.dispatch('posted/update', this.item).then(data => {
+          if (data.result === true) {
+            this.$store.dispatch('alert', {
+              type: "success",
+              message: "成功编辑物品，预祝早日找到新主人。"
+            })
+            this.$router.push({ name: 'posted' })
+          }
           this.$store.dispatch('loading', false)
         })
       }
