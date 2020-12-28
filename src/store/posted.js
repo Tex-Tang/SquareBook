@@ -19,9 +19,6 @@ export default {
     create ({ state, commit }, item) {
       return new Promise((resolve) => {
         addItem(item).then(({ data }) => {
-          if (data.result === true) {
-            commit('set', [data.data, ...state.items])
-          }
           resolve(data)
         })
       }).catch((err) => {
@@ -62,13 +59,6 @@ export default {
     update ({ state , commit }, item) {
       return new Promise((resolve) => {
         updateItem(item).then(({ data }) => {
-          if (data.result === true) {
-            const items = cloneDeep(state.items)
-            if (items.data) {
-              items.data[items.data.findIndex(({id}) => id === item.id)] = data.data
-              commit('set', items)
-            }
-          }
           resolve(data)
         })
       }).catch((err) => {

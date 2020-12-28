@@ -149,6 +149,7 @@
               </v-col>
             </v-row>
             <component 
+              v-if="item.category"
               :is="item.category + '-properties'"
               ref="propertiesForm"
               v-model="item.properties"
@@ -157,6 +158,7 @@
             <!-- Submit btn -->
 
             <component 
+              v-if="item.category"
               :is="item.category + '-content'"
               ref="contentForm"
               v-model="item.content"
@@ -191,12 +193,12 @@ export default {
     images: [],
     uuid: "",
     item: {
-      name: "Test",
+      name: "",
       price: "0.00",
-      category: "uec-book",
-      description: "Test",
-      hand_delivery: [509],
-      post_delivery: [510],
+      category: "",
+      description: "",
+      hand_delivery: [],
+      post_delivery: [],
       properties: {},
       content: [],
       images: []
@@ -277,7 +279,7 @@ export default {
         return;
       }
 
-      //this.$store.dispatch('loading', true)
+      this.$store.dispatch('loading', true)
       if (!this.uuid) {
         this.$store.dispatch('posted/create', this.item).then(data => {
           if (data.result === true) {
