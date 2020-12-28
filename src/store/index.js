@@ -6,7 +6,7 @@ import user from './user'
 import posted from './posted'
 import aggregates from './aggregates'
 
-import { getCategories, getAllPlaces, getActivePlaces } from '../api/aggregate'
+import InitializeStore from './initialize'
 
 Vue.use(Vuex)
 
@@ -16,17 +16,17 @@ const store = new Vuex.Store({
       show: false,
       type: "",
       timeout: 1000,
-      messages: ""
+      message: ""
     },
     loading: false
   },
   mutations: {
   },
   actions: {
-    alert({ state }, { type, messages, timeout = 3000 }) {
+    alert({ state }, { type, message, timeout = 3000 }) {
       state.snackbar.type = type
       state.snackbar.timeout = timeout
-      state.snackbar.messages = messages
+      state.snackbar.message = message
       state.snackbar.show = true
     },
     loading ({ state }, loading) {
@@ -40,20 +40,6 @@ const store = new Vuex.Store({
   }
 })
 
-store.dispatch('loading', true)
-getCategories().then(({ data }) => {
-  let categories = data;
-  getAllPlaces().then(({ data }) => {
-    let places = data;
-    getActivePlaces().then(({ data }) => {
-      let activePlaces = data
-      store.commit('aggregates/set', {
-        places, categories, activePlaces
-      })
-      store.dispatch('loading', false)
-    })
-  })
-})
-
+InitializeStore(store)
 
 export default store;

@@ -1,12 +1,12 @@
 <template>
   <div class="choose-category-page">
     <v-row>
-      <v-col cols="12" :sm="4" :md="4" :lg="3" v-for="category in categories" :key="category.name">
+      <v-col cols="12" :sm="4" :md="4" :lg="3" v-for="(category, index) in categories()" :key="category.name">
         <router-link tag="div" :to="{ name: 'post-add', params: { category: category.name } }">
           <v-card elevation="0" class="category" 
             :style="{
-              'border-color': category.color,
-              'background-color': category.color + '0C'
+              'border-color': colors[index % colors.length],
+              'background-color': colors[index % colors.length] + '0C'
             }">
             <div :style="{ color: category.color }" class="content">
               <span class="mdi" :class="category.icon"></span>
@@ -20,27 +20,17 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 
 export default{
   data: () => ({
-    categories: [
-      { title: "独中课本", icon: 'mdi-book-open-page-variant', name: 'uec-book' }
-    ],
     colors: [
       "#6B7280", "#EF4444", "#F59E0B", "#10B981", "#3B82F6", "#6366F1", "#8B5CF6", "#EC4899"
     ],
-  }),
-  mounted () {
-    this.categories.forEach(item => {
-      this.$set(item, 'color', this.chooseColor())
+    ...mapState({
+      categories: state => state.aggregates.aggregates.categories
     })
-  },
-  methods: {
-    chooseColor () {
-      const random = Math.floor(Math.random() * this.colors.length);
-      return this.colors[random]
-    },
-  }
+  }),
 }
 </script>
 

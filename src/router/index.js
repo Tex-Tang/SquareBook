@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import store from '../store'
 
 Vue.use(VueRouter)
 
@@ -39,7 +40,7 @@ const routes = [
         component: () => import('../pages/posted/Form.vue')
       },
       {
-        path: 'posted/edit/:category/:id',
+        path: 'posted/edit/:category/:uuid',
         name: 'post-edit',
         component: () => import('../pages/posted/Form.vue')
       },
@@ -83,12 +84,18 @@ const routes = [
     children: [
       {
         path: 'login',
-        name: 'Login',
+        name: 'login',
+        meta: {
+          requiresAuth: false
+        },
         component: () => import('../pages/entry/Login.vue')
       },
       {
         path: 'register',
-        name: 'Register',
+        name: 'register',
+        meta: {
+          requiresAuth: false
+        },
         component: () => import('../pages/entry/Register.vue')
       }
     ]
@@ -99,6 +106,23 @@ const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes
+})
+
+router.beforeEach((to, from, next) => {
+  const isAuthenticated = store.getters['user/isLoggedIn']
+  if (!store.state.loading) {
+    if (to.meta.requiresAuth === undefined && !isAuthenticated) {
+      router.push('/')
+      return next({ name: 'login', query: { 
+        url: to.path
+      }})
+    }
+  
+    if ((to.name === 'login' || to.name === 'register ') && isAuthenticated){
+      return next('/')
+    }
+  }
+  next()
 })
 
 export default router
