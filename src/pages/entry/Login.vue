@@ -5,11 +5,11 @@
       卖书？<router-link class="btn-link" tag="a" to="/register">现在注册吧</router-link>
     </div>
     <div class="mt-4">
-      <a href="/api/oauth/facebook" class="social-btn facebook rounded">
+      <a href="/oauth/facebook" class="social-btn facebook rounded">
         <span class="mdi mdi-facebook text-h4"></span>
         Sign in with Facebook
       </a>
-      <a href="/api/oauth/google" class="social-btn google rounded">
+      <a href="/oauth/google" class="social-btn google rounded">
         <span></span>
         Sign in with Google
       </a>

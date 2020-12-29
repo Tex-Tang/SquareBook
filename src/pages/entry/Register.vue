@@ -97,7 +97,7 @@
             <span class="mdi mdi-facebook text-h4"></span>
             Sign in with Facebook
           </a>
-          <a  href="/oauth/google" class="social-btn google rounded">
+          <a href="/oauth/google" class="social-btn google rounded">
             <span></span>
             Sign in with Google
           </a>
