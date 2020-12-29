@@ -20,9 +20,9 @@ export default {
       return new Promise((resolve) => {
         addItem(item).then(({ data }) => {
           resolve(data)
+        }).catch((err) => {
+          resolve({ result: false, data: err.response.data })
         })
-      }).catch((err) => {
-        resolve({ result: false, data: err.response.data })
       })
     },
     getAll ({ commit }) {
@@ -39,8 +39,8 @@ export default {
     },
     getById ({ state, commit }, uuid) {
       return new Promise((resolve) => {
-        if (state.items.data) {
-         const found = state.items.data.find((item) => item.uuid == uuid)
+        if (state.items.length) {
+         const found = state.items.find((item) => item.uuid == uuid)
           if (found) {
             commit('setSelected', found)
             return resolve({ result: true, data: found })
@@ -60,23 +60,23 @@ export default {
       return new Promise((resolve) => {
         updateItem(item).then(({ data }) => {
           resolve(data)
+        }).catch((err) => {
+          resolve({ result: false, data: err.response.data })
         })
-      }).catch((err) => {
-        resolve({ result: false, data: err.response.data })
       })
     },
-    async delete ({ commit }, item) {
+    async delete ({ commit, state }, item) {
       return new Promise((resolve) => {
-        deleteItem(id).then(({ data }) => {
+        deleteItem(item.uuid).then(({ data }) => {
           if (data.result === true) {
             const items = cloneDeep(state.items)
-            items.data.splice(items.data.findIndex(({id}) => id === item.id), 1)
+            items.splice(items.findIndex(({uuid}) => uuid === item.uuid), 1)
             commit('set', items)
           }
           resolve(data)
+        }).catch((err) => {
+          resolve({ result: false, data: err.response.data })
         })
-      }).catch((err) => {
-        resolve({ result: false, data: err.response.data })
       })
     },
   }

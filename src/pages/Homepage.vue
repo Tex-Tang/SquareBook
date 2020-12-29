@@ -1,93 +1,85 @@
 <template>
   <div class="homepage">
-    <!-- 
     <v-row>
-      <v-col cols="3">
-        <form class="pa-4 white bordered">
-          <div class="subtitle mb-2">搜寻</div>
-          <v-text-field
-            placeholder="搜寻关键字..."
-            outlined
-            dense
-          ></v-text-field>
-          <div class="subtitle mb-2">面交地点</div>
-          <v-checkbox
-            v-for="(count, place) in categories.hand_delivery"
-            :label="places()[place] + ` (${count})`"
-            v-if="count > 0"
-            dense
-            class="mt-0"
-            hide-details
-          ></v-checkbox>
-          <div class="subtitle mt-4 mb-2">邮寄地点</div>
-          <v-checkbox
-            v-for="(count, place) in categories.post_delivery"
-            :label="places()[place] + ` (${count})`"
-            v-if="count > 0"
-            dense
-            class="mt-0"
-            hide-details
-          ></v-checkbox>
-        </form>
+      <v-col cols="12" :md="3" class="d-none d-md-block">
+        <search-form category="uec-book" v-model="search" ref="searchForm"/>
       </v-col>
-      <v-col cols="9">
+      <v-col cols="12" class="d-md-none">
+        <v-btn @click="searchDialog = true" color="primary" depressed>
+          <v-icon>mdi-filter</v-icon>
+          搜寻
+        </v-btn>
+      </v-col>
+      <v-col cols="12" :md="9">
         <v-row>
-          <v-col cols="4" v-for="item in items" :key="item.id" class="py-0">
-            <router-link tag="div" class="cursor-pointer" :to="`/item/${item.category}/${item.id}`">
-              <v-card elevation="0" class="bordered">
-                <v-img
-                  aspect-ratio="1"
-                  :src="item.images[0][400]"
-                ></v-img>
-
-                <v-card-title>{{item.title}}</v-card-title>
-                <v-card-text class="description pb-0">
-                  {{ item.description }}
-                </v-card-text>
+          <v-col v-if="loading()" class="pt-0" cols="12" :sm="6" :md="4" v-for="n in 12" :key="n">
+            <v-skeleton-loader
+              type="image, article, actions"
+            ></v-skeleton-loader>
+          </v-col>
+          <v-col class="pt-0" cols="12" :sm="6" :md="4" v-for="item in items()" :key="item.uuid">
+            <router-link tag="div" class="cursor-pointer" :to="{ name: 'item', params: { uuid: item.uuid }}">
+              <v-card elevation="2" class="bordered">
+                <v-img :src="item.images[0].path" aspect-ratio="1"></v-img>
+                <v-card-title>{{item.name}}</v-card-title>
                 <v-card-text>
-                  <v-chip 
-                    v-for="(place, ind) in item.hand_delivery" 
-                    :key="item.id + 'hand-delivery-' + ind" 
-                    class="mb-2 mr-2" label
-                    color="primary">
-                    {{ places()[place] }}
-                  </v-chip>
-
-                  <v-chip 
-                    v-for="(place, ind) in item.post_delivery" 
-                    :key="item.id + 'post-delivery-' + ind" 
-                    class="mb-2 mr-2" label>
-                    {{ places()[place] }}
-                  </v-chip>
+                  <div class="description">
+                    {{ item.description }}
+                  </div>
                 </v-card-text>
               </v-card>
             </router-link>
           </v-col>
         </v-row>
       </v-col>
-    </v-row> -->
+    </v-row>
+    <v-dialog v-model="searchDialog" scrollable>
+      <v-card class="py-8">
+        <v-card-text>
+          <search-form category="uec-book" v-model="search" ref="searchForm"></search-form>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex'
-import { db } from '../api/firebase'
-import imageHelper  from '../utils/ImageUpload'
-import { filter } from 'lodash'
+import { getItems } from '../api/item'
+import { debounce } from 'lodash'
+import { mapState } from 'vuex';
 
 export default {
+  components: {
+    'search-form': () => import('../components/search-forms/Index')
+  },
   data: () => ({
-    search: {
-      text: "",
-      hand_delivery: []
-    },
-    items: [],
-    categories: {},
+    data: [],
+    search: {},
+    searchDialog: false,
     ...mapState({
-      places: state => state.aggregates.placesMap
-    }),
-    page: 0,
-    helper: new imageHelper(),
+      loading: state => state.loading,
+      items: state => state.items.items
+    })
   }),
+  mounted () {
+    this.refresh();
+  },
+  methods: {
+    refresh () {
+      this.data = []
+      this.$store.dispatch('loading', true)
+      this.$store.dispatch('items/getAll', this.search).then(({ data }) => {
+        this.$store.dispatch('loading', false)
+      })
+    }
+  },
+  watch: {
+    search: {
+      handler (val) {
+        this.refresh()
+      },
+      deep: true,
+    }
+  }
 }
 </script>

@@ -8,11 +8,11 @@
               <div class="title mb-2">照片</div>
               <div class="subtitle">照片可以让卖家对你的产品有更直观的感受。</div>
             </v-col>
-            <v-col cols="12" :sm="4" :md="12" :lg="6" v-if="canUpload">
+            <v-col cols="6" :sm="4" :md="12" :lg="6" v-if="canUpload">
               <label class="upload-file-btn rounded" for="image">
                 <div class="upload-caption">
                   <span class="mdi mdi-upload"></span>
-                  上传图片
+                  <span class="text-caption text-sm-body-1">上传图片</span>
                 </div>
                 <input
                   extensions="gif,jpg,jpeg,png,webp"
@@ -23,7 +23,7 @@
                   id="image">
               </label>
             </v-col>
-            <v-col cols="12" :sm="4" :md="12" :lg="6" v-for="(image, ind) in item.images" :key="'old-image' + ind">
+            <v-col cols="6" :sm="4" :md="12" :lg="6" v-for="(image, ind) in item.images" :key="'old-image' + ind">
               <div class="relative uploaded-photo">
                 <v-img
                   :loading="loading"
@@ -266,9 +266,14 @@ export default {
       }
 
       const validateProperties = this.$refs.propertiesForm.validate()
+      const validateContent    = this.$refs.contentForm.validate()
 
       if (!validateProperties.success) {
         messages = messages.concat(validateProperties.data)
+      }
+
+      if (!validateContent.success) {
+        messages = messages.concat(validateContent.data)
       }
 
       if (messages.length !== 0) {
