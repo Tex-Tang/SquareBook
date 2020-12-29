@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-app-bar app flat class="white" height="68px">
-      <v-container class="fill-height py-1 px-0 px-sm-3">
+      <v-container class="fill-height py-1 px-0 px-sm-3 mx-auto" style="max-width: 1100px;">
         <router-link to="/" tag="div" class="d-flex cursor-pointer">
           <logo style="width: 30px" />
           <span class="text-h6 font-weight-medium ml-3 primary--text font-bold">方书</span>
@@ -52,9 +52,9 @@
       </v-container>
     </v-app-bar>
     <v-main class="grey lighten-5">
-      <v-container>
+      <div class="pa-4 mx-auto" style="max-width: 1100px">
         <router-view></router-view>
-      </v-container>
+      </div>
     </v-main>
   </v-app>
 </template>

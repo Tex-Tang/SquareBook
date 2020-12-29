@@ -12,6 +12,7 @@
     "firebase": "^8.2.1",
     "lodash": "^4.17.20",
     "pica": "^6.1.1",
+    "swiper": "^6.4.5",
     "vee-validate": "^3.4.5",
     "vue": "^2.6.11",
     "vue-router": "^3.2.0",

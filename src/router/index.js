@@ -17,10 +17,10 @@ const routes = [
         component: () => import('../pages/Homepage.vue')
       },
       {
-        path: 'product/:id',
-        name: 'product',
+        path: 'item/:uuid',
+        name: 'item',
         meta: { requiresAuth: false },
-        component: () => import('../pages/Product.vue')
+        component: () => import('../pages/Item.vue')
       },
 
       // Posted

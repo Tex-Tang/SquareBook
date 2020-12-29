@@ -19,6 +19,11 @@
   text-overflow: ellipsis;
 }
 
+.description.one-line{
+  -webkit-line-clamp: 1;
+  min-height: 22px;
+}
+
 .v-divider{
   text-align: center;
 }

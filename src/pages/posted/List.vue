@@ -4,7 +4,7 @@
       + 添加
     </v-btn>
     <v-row>
-      <v-col cols="12" :sm="6" v-for="item in items().data" :key="item.id">
+      <v-col cols="12" :sm="6" v-for="item in items()" :key="item.id">
         <v-card elevation="0" class="bordered rounded">
           <div class="pa-4">
             <v-row no-gutters>
@@ -15,7 +15,7 @@
                 <div class="pl-4">
                   <div class="title">{{ item.title }}</div>
                   <div class="headline primary--text">RM {{ item.price }}</div>
-                  <div class="subtitle grey--text description">{{ item.description }}aaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaa</div>
+                  <div class="subtitle grey--text description">{{ item.description }}</div>
                   <div class="d-flex mt-2">
                     <v-btn :to="{ 
                       name: 'post-edit', 
@@ -59,7 +59,6 @@ export default {
     deleteItem (item) {
       this.$store.dispatch('loading', true)
       this.$store.dispatch('posted/delete', item).then(res => {
-        console.log(res)
         this.$store.dispatch('loading', false)
       })
     }

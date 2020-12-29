@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 
 // Modules
 import user from './user'
+import items from './items'
 import posted from './posted'
 import aggregates from './aggregates'
 
@@ -35,6 +36,7 @@ const store = new Vuex.Store({
   },
   modules: {
     user,
+    items,
     posted,
     aggregates,
   }

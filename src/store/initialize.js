@@ -1,4 +1,4 @@
-import { getCategories, getAllPlaces, getActivePlaces } from '../api/aggregate'
+import { getCategories, getAllPlaces } from '../api/aggregate'
 import { getProfile } from '../api/auth'
 import router from '../router'
 
@@ -11,23 +11,20 @@ export default (store) => {
         place.disabled = true // Make parent not selectable
         return place
       });
-      getActivePlaces().then(({ data }) => {
-        let activePlaces = data
-        store.commit('aggregates/set', {
-          places, categories, activePlaces
-        })
-        getProfile().then(({ data }) => {
-          if (data.result === false) {
-            store.commit('user/reset')
+      store.commit('aggregates/set', {
+        places, categories
+      })
+      getProfile().then(({ data }) => {
+        if (data.result === false) {
+          store.commit('user/reset')
+        }
+        if (data.result === true) {
+          store.commit('user/set', data.data)
+          if (router.currentRoute.name === 'login' || router.currentRoute.name === 'register') {
+            router.push(router.currentRoute.query.url)
           }
-          if (data.result === true) {
-            store.commit('user/set', data.data)
-            if (router.currentRoute.name === 'login' || router.currentRoute.name === 'register') {
-              router.push(router.currentRoute.query.url)
-            }
-          }
-          store.dispatch('loading', false)
-        })
+        }
+        store.dispatch('loading', false)
       })
     })
   })
