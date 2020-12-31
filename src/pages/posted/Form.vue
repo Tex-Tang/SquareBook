@@ -91,6 +91,22 @@
                   ></v-text-field>
                 </validation-provider>
               </v-col>
+
+              <v-col cols="12" class="py-0">
+                <template v-if="item.category === 'text-book'">
+                  <text-book-properties 
+                    ref="propertiesForm" 
+                    v-model="item.properties" 
+                    :loading="loading" />
+                </template>
+                <template v-if="item.category === 'note'">
+                  <note-properties 
+                    ref="propertiesForm" 
+                    v-model="item.properties" 
+                    :loading="loading" />
+                </template>
+              </v-col>
+
               <!-- Description -->
               <v-col cols="12">
                 <validation-provider v-slot="{ errors }" name="描述" rules="required">
@@ -148,22 +164,15 @@
                 </place-selection-dialog>
               </v-col>
             </v-row>
-            <component 
-              v-if="item.category"
-              :is="item.category + '-properties'"
-              ref="propertiesForm"
-              v-model="item.properties"
-              :loading="loading">
-            </component>
-            <!-- Submit btn -->
 
-            <component 
-              v-if="item.category"
-              :is="item.category + '-content'"
-              ref="contentForm"
-              v-model="item.content"
-              :loading="loading">
-            </component>
+            <template v-if="item.category === 'text-book'">
+              <text-book-content 
+                ref="contentForm" 
+                v-model="item.content" 
+                :loading="loading" />
+            </template>
+            
+            <!-- Submit btn -->
             <v-row>
               <v-col cols="12" class="text-right">
                 <v-btn :loading="loading" type="submit" color="primary" depressed>提交</v-btn>
@@ -184,8 +193,9 @@ import PlaceSelectionDialog from '../../components/forms/PlacesSelectionDialog'
 
 export default {
   components: {
-    'uec-book-properties': () => import('../../components/forms/uecbook/properties'),
-    'uec-book-content': () => import('../../components/forms/uecbook/content'),
+    'text-book-properties': () => import('../../components/forms/text-book/properties'),
+    'text-book-content': () => import('../../components/forms/text-book/content'),
+    'note-properties': () => import('../../components/forms/note/properties'),
     PlaceSelectionDialog
   },
   data: () => ({
@@ -265,15 +275,18 @@ export default {
         messages.push('请上传至少选择一个交易地点。')
       }
 
-      const validateProperties = this.$refs.propertiesForm.validate()
-      const validateContent    = this.$refs.contentForm.validate()
-
-      if (!validateProperties.success) {
-        messages = messages.concat(validateProperties.data)
+      if (this.$refs.propertiesForm) {
+        const validateProperties = this.$refs.propertiesForm.validate()
+        if (!validateProperties.success) {
+          messages = messages.concat(validateProperties.data)
+        }
       }
 
-      if (!validateContent.success) {
-        messages = messages.concat(validateContent.data)
+      if (this.$refs.contentForm) {
+        const validateContent    = this.$refs.contentForm.validate()
+        if (!validateContent.success) {
+          messages = messages.concat(validateContent.data)
+        }
       }
 
       if (messages.length !== 0) {
@@ -320,12 +333,6 @@ export default {
 </script>
 
 <style lang="scss">
-.photos {
-  //@media screen and (min-width: 960px){
-  //  position: sticky;
-  //  top: 100px;
-  //}
-}
 .upload-file-btn{
   display: block;
   width: 100%;

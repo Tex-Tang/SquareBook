@@ -4,11 +4,17 @@ export default {
   namespaced: true,
   state: () => ({
     items: [],
+    pagination: {},
     selectedItem: {}
   }),
   mutations: {
     set(state, data) {
-      state.items = data
+      state.items = data.data
+      state.pagination = {
+        total: data.meta.total,
+        perPage: data.meta.per_page,
+        lastPage: data.meta.last_page
+      }
     },
     setSelected(state, data) {
       state.selectedItem = data

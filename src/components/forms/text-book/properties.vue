@@ -1,8 +1,5 @@
 <template>
   <v-row>
-    <v-col cols="12">
-      <div class="title">简单资讯</div>
-    </v-col>
     <v-col cols="12" :md="7">
       <validation-provider
         v-slot="{ errors }"
@@ -48,7 +45,7 @@
 
 <script>
 import { mapState } from 'vuex'
-import { levels } from '../../../enum/uec-book.enum'
+import { levels } from '../../../enum/levels.enum'
 
 export default {
   props: {
