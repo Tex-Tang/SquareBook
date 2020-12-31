@@ -1,85 +1,53 @@
 <template>
   <div class="homepage">
-    <v-row>
-      <v-col cols="12" :md="3" class="d-none d-md-block">
-        <search-form category="uec-book" v-model="search" ref="searchForm"/>
-      </v-col>
-      <v-col cols="12" class="d-md-none">
-        <v-btn @click="searchDialog = true" color="primary" depressed>
-          <v-icon>mdi-filter</v-icon>
-          搜寻
-        </v-btn>
-      </v-col>
-      <v-col cols="12" :md="9">
-        <v-row>
-          <v-col v-if="loading()" class="pt-0" cols="12" :sm="6" :md="4" v-for="n in 12" :key="n">
-            <v-skeleton-loader
-              type="image, article, actions"
-            ></v-skeleton-loader>
-          </v-col>
-          <v-col class="pt-0" cols="12" :sm="6" :md="4" v-for="item in items()" :key="item.uuid">
-            <router-link tag="div" class="cursor-pointer" :to="{ name: 'item', params: { uuid: item.uuid }}">
-              <v-card elevation="2" class="bordered">
-                <v-img :src="item.images[0].path" aspect-ratio="1"></v-img>
-                <v-card-title>{{item.name}}</v-card-title>
-                <v-card-text>
-                  <div class="description">
-                    {{ item.description }}
-                  </div>
-                </v-card-text>
-              </v-card>
-            </router-link>
-          </v-col>
-        </v-row>
-      </v-col>
-    </v-row>
-    <v-dialog v-model="searchDialog" scrollable>
-      <v-card class="py-8">
-        <v-card-text>
-          <search-form category="uec-book" v-model="search" ref="searchForm"></search-form>
-        </v-card-text>
-      </v-card>
-    </v-dialog>
+    <div class="image-wrapper">
+      <div class="caption px-8">
+        <div class="text-h4 font-weight-bold">
+          <logo width="32px" color="white" class="mb-n1" />
+          方书
+        </div>
+        <div class="text-body-1 mt-4">
+          我觉得，当书本给我讲到闻所未闻，见所未见的人物、感情、思想和态度时，似乎是每一本书都在我面前打开了一扇窗户，让我看到一个不可思议的新世界。——高尔基
+        </div>
+      </div>
+      <v-img height="400" src="/images/background.jpg" gradient="135deg, rgba(0,0,0, .2) 0%, rgb(0,0,0, .3) 20%" class="rounded-lg"></v-img>
+    </div>
+    <v-tabs v-model="tab" centered class="mt-4">
+      <v-tab to="books">书籍</v-tab>
+      <v-tab to="text-books">课本</v-tab>
+      <v-tab to="notes">笔记</v-tab>
+    </v-tabs>
+    <v-fade-transition>
+      <div class="mt-8">
+        <router-view></router-view>
+      </div>
+    </v-fade-transition>
   </div>
 </template>
 
 <script>
-import { getItems } from '../api/item'
-import { debounce } from 'lodash'
-import { mapState } from 'vuex';
+import logo from '../components/Logo'
 
 export default {
-  components: {
-    'search-form': () => import('../components/search-forms/Index')
-  },
   data: () => ({
-    data: [],
-    search: {},
-    searchDialog: false,
-    ...mapState({
-      loading: state => state.loading,
-      items: state => state.items.items
-    })
+    tab: 0,
   }),
-  mounted () {
-    this.refresh();
-  },
-  methods: {
-    refresh () {
-      this.data = []
-      this.$store.dispatch('loading', true)
-      this.$store.dispatch('items/getAll', this.search).then(({ data }) => {
-        this.$store.dispatch('loading', false)
-      })
-    }
-  },
-  watch: {
-    search: {
-      handler (val) {
-        this.refresh()
-      },
-      deep: true,
-    }
+  components: {
+    logo
   }
 }
 </script>
+
+<style lang="scss">
+.image-wrapper{
+  position: relative;
+  display: flex;
+  align-items: center;
+  .caption{
+    position: absolute;
+    z-index: 1;
+    color: white;
+    max-width: 550px;
+  }
+}
+</style>

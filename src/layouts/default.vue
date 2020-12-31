@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-app-bar app flat class="white" height="68px">
-      <v-container class="fill-height py-1 px-0 px-sm-3 mx-auto" style="max-width: 1100px;">
+      <v-container class="px-6">
         <router-link to="/" tag="div" class="d-flex cursor-pointer">
           <logo style="width: 30px" />
           <span class="text-h6 font-weight-medium ml-3 primary--text font-bold">方书</span>
@@ -51,10 +51,10 @@
         </v-menu>
       </v-container>
     </v-app-bar>
-    <v-main class="grey lighten-5">
-      <div class="pa-4 mx-auto" style="max-width: 1100px">
+    <v-main>
+      <v-container class="px-6">
         <router-view></router-view>
-      </div>
+      </v-container>
     </v-main>
   </v-app>
 </template>
@@ -104,8 +104,14 @@ export default {
 </script>
 
 <style lang="scss">
-.v-app-bar > div{
-  border-bottom: solid .05rem rgba($color: #000000, $alpha: .08);
+.v-app-bar .v-toolbar__content{
+  padding: 0;
+}
+.v-app-bar .container{
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+ // border-bottom: solid .05rem rgba($color: #000000, $alpha: .08);
 }
 .profile-btn{
   border: solid .05rem #EEEEEE;

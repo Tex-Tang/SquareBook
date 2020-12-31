@@ -87,31 +87,21 @@
           <template v-if="item.category == 'uec-book'">
             <div class="white pa-3 py-5 bordered">
               <div class="title ml-3">书单</div>
-              <v-simple-table>
-                <template v-slot:default>
-                  <thead>
-                    <tr>
-                      <th class="text-left">书名</th>
-                      <th class="text-left">出版商</th>
-                      <th class="text-left">年份</th>
-                      <th class="text-left">数量</th>
-                      <th class="text-left">书况</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr
-                      v-for="book in item.content"
-                      :key="book.name"
-                    >
-                      <td>{{ book.name }}</td>
-                      <td>{{ book.properties.publisher }}</td>
-                      <td>{{ book.properties.year }}</td>
-                      <td>{{ book.quantity }}</td>
-                      <td>{{ book.properties.condition }}</td>
-                    </tr>
-                  </tbody>
+              <v-data-table
+                :headers="headers"
+                :items="item.content"
+                hide-default-footer
+              >
+                <template v-slot:item.publisher="{ item }">
+                  {{ item.properties.publisher }}
                 </template>
-              </v-simple-table>
+                <template v-slot:item.year="{ item }">
+                  {{ item.properties.year }}
+                </template>
+                <template v-slot:item.condition="{ item }">
+                  {{ conditions.find(({id}) => id == item.properties.condition).title }}
+                </template>
+              </v-data-table>
             </div>
           </template>
         </v-col>
@@ -124,14 +114,23 @@
 import Swiper from 'swiper/bundle';
 import 'swiper/swiper-bundle.css';
 import { mapState } from 'vuex';
-import { levels } from '../enum/uec-book.enum'
+import { levels } from '../../../enum/levels.enum'
+import { conditions } from '../../../enum/text-book.enum'
 
 export default {
   data: () => ({
     item: {},
     galleryThumbs: null,
     galleryTop: null,
+    headers: [
+      { text: '书名', value: 'name' },
+      { text: '出版商', value: 'publisher' },
+      { text: '年份', value: 'year' },
+      { text: '数量', value: 'quantity' },
+      { text: '书况', value: 'condition' },
+    ],
     levels,
+    conditions,
     ...mapState({
       placesMap: state => state.aggregates.placesMap
     })
