@@ -20,3 +20,13 @@ export function getActivePlaces() {
     method: 'GET',
   })
 }
+
+export function getActiveProperties(category) {
+  return request({
+    url: '/properties/active',
+    method: 'POST',
+    data: {
+      category
+    }
+  });
+}

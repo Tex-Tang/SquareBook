@@ -14,14 +14,56 @@ const routes = [
         path: '',
         name: 'homepage',
         meta: { requiresAuth: false },
-        component: () => import('../pages/Homepage.vue')
+        component: () => import('../pages/Homepage.vue'),
+        children: [
+          {
+            path: '',
+            redirect: { name: 'books-list' }
+          },
+          {
+            path: 'text-books',
+            name: 'text-books-list',
+            meta: { requiresAuth: false },
+            component: () => import('../pages/items/text-book/List.vue'),
+          },
+          {
+            path: 'notes',
+            name: 'notes-list',
+            meta: { requiresAuth: false },
+            component: () => import('../pages/items/note/List.vue'),
+          },
+          {
+            path: 'books',
+            name: 'books-list',
+            meta: { requiresAuth: false },
+            component: () => import('../pages/items/book/List.vue'),
+          }
+        ]
       },
       {
-        path: 'product/:id',
-        name: 'product',
+        path: 'text-book/:uuid',
+        name: 'text-book-single',
         meta: { requiresAuth: false },
-        component: () => import('../pages/Product.vue')
+        component: () => import('../pages/items/text-book/Single.vue')
       },
+      {
+        path: 'note/:uuid',
+        name: 'note-single',
+        meta: { requiresAuth: false },
+        component: () => import('../pages/items/note/Single.vue')
+      },
+      {
+        path: 'book/:uuid',
+        name: 'book-single',
+        meta: { requiresAuth: false },
+        component: () => import('../pages/items/book/Single.vue')
+      },
+      //{
+      //  path: 'item/:uuid',
+      //  name: 'item',
+      //  meta: { requiresAuth: false },
+      //  component: () => import('../pages/Item.vue')
+      //},
 
       // Posted
       {

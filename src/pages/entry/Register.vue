@@ -93,11 +93,11 @@
       </v-tab-item>
       <v-tab-item>
         <div class="mt-4">
-          <a href="/oauth/google" class="social-btn facebook rounded">
+          <a href="/oauth/facebook" class="social-btn facebook rounded">
             <span class="mdi mdi-facebook text-h4"></span>
             Sign in with Facebook
           </a>
-          <a  href="/oauth/facebook" class="social-btn google rounded">
+          <a href="/oauth/google" class="social-btn google rounded">
             <span></span>
             Sign in with Google
           </a>

@@ -105,7 +105,7 @@
             :error-messages="errors"
             :items="conditions"
             item-text="title"
-            item-value="id"
+            item-value="value"
             label="质量"
             outlined
             :loading="loading"
@@ -124,7 +124,8 @@
 </template>
 
 <script>
-import { booklist, conditions, publishers } from '../../../enum/uec-book.enum'
+import { conditions, publishers } from '../../../enum/text-book.enum'
+import { booklist } from '../../../enum/uec-book.enum'
 
 export default {
   props: {

@@ -8,11 +8,11 @@
               <div class="title mb-2">照片</div>
               <div class="subtitle">照片可以让卖家对你的产品有更直观的感受。</div>
             </v-col>
-            <v-col cols="12" :sm="4" :md="12" :lg="6" v-if="canUpload">
+            <v-col cols="6" :sm="4" :md="12" :lg="6" v-if="canUpload">
               <label class="upload-file-btn rounded" for="image">
                 <div class="upload-caption">
                   <span class="mdi mdi-upload"></span>
-                  上传图片
+                  <span class="text-caption text-sm-body-1">上传图片</span>
                 </div>
                 <input
                   extensions="gif,jpg,jpeg,png,webp"
@@ -23,7 +23,7 @@
                   id="image">
               </label>
             </v-col>
-            <v-col cols="12" :sm="4" :md="12" :lg="6" v-for="(image, ind) in item.images" :key="'old-image' + ind">
+            <v-col cols="6" :sm="4" :md="12" :lg="6" v-for="(image, ind) in item.images" :key="'old-image' + ind">
               <div class="relative uploaded-photo">
                 <v-img
                   :loading="loading"
@@ -91,6 +91,22 @@
                   ></v-text-field>
                 </validation-provider>
               </v-col>
+
+              <v-col cols="12" class="py-0">
+                <template v-if="item.category === 'text-book'">
+                  <text-book-properties 
+                    ref="propertiesForm" 
+                    v-model="item.properties" 
+                    :loading="loading" />
+                </template>
+                <template v-if="item.category === 'note'">
+                  <note-properties 
+                    ref="propertiesForm" 
+                    v-model="item.properties" 
+                    :loading="loading" />
+                </template>
+              </v-col>
+
               <!-- Description -->
               <v-col cols="12">
                 <validation-provider v-slot="{ errors }" name="描述" rules="required">
@@ -148,20 +164,15 @@
                 </place-selection-dialog>
               </v-col>
             </v-row>
-            <component 
-              :is="item.category + '-properties'"
-              ref="propertiesForm"
-              v-model="item.properties"
-              :loading="loading">
-            </component>
-            <!-- Submit btn -->
 
-            <component 
-              :is="item.category + '-content'"
-              ref="contentForm"
-              v-model="item.content"
-              :loading="loading">
-            </component>
+            <template v-if="item.category === 'text-book'">
+              <text-book-content 
+                ref="contentForm" 
+                v-model="item.content" 
+                :loading="loading" />
+            </template>
+            
+            <!-- Submit btn -->
             <v-row>
               <v-col cols="12" class="text-right">
                 <v-btn :loading="loading" type="submit" color="primary" depressed>提交</v-btn>
@@ -182,8 +193,9 @@ import PlaceSelectionDialog from '../../components/forms/PlacesSelectionDialog'
 
 export default {
   components: {
-    'uec-book-properties': () => import('../../components/forms/uecbook/properties'),
-    'uec-book-content': () => import('../../components/forms/uecbook/content'),
+    'text-book-properties': () => import('../../components/forms/text-book/properties'),
+    'text-book-content': () => import('../../components/forms/text-book/content'),
+    'note-properties': () => import('../../components/forms/note/properties'),
     PlaceSelectionDialog
   },
   data: () => ({
@@ -191,12 +203,12 @@ export default {
     images: [],
     uuid: "",
     item: {
-      name: "Test",
+      name: "",
       price: "0.00",
-      category: "uec-book",
-      description: "Test",
-      hand_delivery: [509],
-      post_delivery: [510],
+      category: "",
+      description: "",
+      hand_delivery: [],
+      post_delivery: [],
       properties: {},
       content: [],
       images: []
@@ -263,10 +275,18 @@ export default {
         messages.push('请上传至少选择一个交易地点。')
       }
 
-      const validateProperties = this.$refs.propertiesForm.validate()
+      if (this.$refs.propertiesForm) {
+        const validateProperties = this.$refs.propertiesForm.validate()
+        if (!validateProperties.success) {
+          messages = messages.concat(validateProperties.data)
+        }
+      }
 
-      if (!validateProperties.success) {
-        messages = messages.concat(validateProperties.data)
+      if (this.$refs.contentForm) {
+        const validateContent    = this.$refs.contentForm.validate()
+        if (!validateContent.success) {
+          messages = messages.concat(validateContent.data)
+        }
       }
 
       if (messages.length !== 0) {
@@ -277,7 +297,7 @@ export default {
         return;
       }
 
-      //this.$store.dispatch('loading', true)
+      this.$store.dispatch('loading', true)
       if (!this.uuid) {
         this.$store.dispatch('posted/create', this.item).then(data => {
           if (data.result === true) {
@@ -313,12 +333,6 @@ export default {
 </script>
 
 <style lang="scss">
-.photos {
-  //@media screen and (min-width: 960px){
-  //  position: sticky;
-  //  top: 100px;
-  //}
-}
 .upload-file-btn{
   display: block;
   width: 100%;
