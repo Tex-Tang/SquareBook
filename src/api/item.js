@@ -14,3 +14,10 @@ export function getItemById(uuid) {
     method: 'GET',
   })
 }
+
+export function getContact(method, uuid) {
+  return request({
+    url: '/item/contact/' + method + '/' + uuid,
+    method: 'GET',
+  })
+}

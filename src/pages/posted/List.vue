@@ -37,6 +37,7 @@
               }
             }" color="primary" depressed>编辑</v-btn>
             <v-btn class="ml-2" @click="deleteItem(item)" color="error" depressed>删除</v-btn>
+            <v-btn class="ml-2" @click="soldItem(item.uuid)" depressed>已卖出</v-btn>
           </v-card-actions>
         </v-card>
       </v-col>
@@ -45,14 +46,11 @@
 </template>
 
 <script>
-import firebase from 'firebase/app'
 import { ItemStatus } from '../../enum/item-status.enum'
-import ImageUpload from '../../utils/ImageUpload'
 import { mapActions, mapState } from 'vuex'
 
 export default {
   data: () => ({
-    unsubscribe: null,
     ...mapState({
       items: state => state.posted.items
     }),
@@ -67,6 +65,12 @@ export default {
     deleteItem (item) {
       this.$store.dispatch('loading', true)
       this.$store.dispatch('posted/delete', item).then(res => {
+        this.$store.dispatch('loading', false)
+      })
+    },
+    soldItem (uuid) {
+      this.$store.dispatch('loading', true)
+      this.$store.dispatch('posted/sold', uuid).then(res => {
         this.$store.dispatch('loading', false)
       })
     }

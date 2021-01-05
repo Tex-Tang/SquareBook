@@ -1,5 +1,5 @@
 import { cloneDeep } from 'lodash'
-import { addItem, deleteItem, getItemById, getItems, updateItem } from '../api/posted'
+import { addItem, deleteItem, getItemById, getItems, soldItem, updateItem } from '../api/posted'
 
 export default {
   namespaced: true,
@@ -59,6 +59,15 @@ export default {
     update ({ state , commit }, item) {
       return new Promise((resolve) => {
         updateItem(item).then(({ data }) => {
+          resolve(data)
+        }).catch((err) => {
+          resolve({ result: false, data: err.response.data })
+        })
+      })
+    },
+    sold (context, uuid) {
+      return new Promise((resolve) => {
+        soldItem(uuid).then(({ data }) => {
           resolve(data)
         }).catch((err) => {
           resolve({ result: false, data: err.response.data })

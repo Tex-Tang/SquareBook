@@ -175,7 +175,7 @@
       
       <!-- Items page -->
       <v-col v-if="items().length" class="pt-0" cols="12" :sm="6" :md="3" v-for="(item, index) in items()" :key="'item-'+index">
-        <router-link tag="div" class="cursor-pointer mb-2" :to="{ name: 'note-single', params: { uuid: item.uuid }}">
+        <router-link tag="div" class="cursor-pointer mb-2" :to="{ name: 'book-single', params: { uuid: item.uuid }}">
           <v-card elevation="0" class="mb-8">
             <v-img class="rounded-lg" :src="item.images[0].path" :aspect-ratio="4/3"></v-img>
             <div class="chips">

@@ -69,9 +69,9 @@ export default {
   },
   data: () => ({
     links: [
-      { title: '我发布的', to: { name: 'posted'}, icon: 'mdi-format-list-numbered' },
-      { title: '我卖出的', to: { name: 'sold'  }, icon: 'mdi-check-all' },
-      { title: '我购买的', to: { name: 'bought'}, icon: 'mdi-briefcase-download' }
+      { title: '我发布的', to: { name: 'posted' }, icon: 'mdi-format-list-numbered' },
+      { title: '我卖出的', to: { name: 'sold'   }, icon: 'mdi-check-all' },
+      { title: '联系方式 / 设定', to: { name: 'contact'}, icon: 'mdi-contactless-payment-circle' },
     ],
     ...mapGetters({
       isLoggedIn: 'user/isLoggedIn'
