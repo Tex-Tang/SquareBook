@@ -113,9 +113,9 @@ const routes = [
 
       // Live chat
       {
-        path: 'chat',
-        name: 'chat',
-        component: () => import('../pages/chat/Index.vue')
+        path: 'contact',
+        name: 'contact',
+        component: () => import('../pages/contact/Index.vue')
       }
     ]
   },

@@ -53,7 +53,7 @@
               </v-col>
               <!-- Title -->
               <v-col cols="12" :sm="8">
-                <validation-provider v-slot="{ errors }" name="标题" rules="required|min:5|max:20">
+                <validation-provider v-slot="{ errors }" name="标题" rules="required|max:20">
                   <v-text-field
                     v-model="item.name"
                     :counter="20"
@@ -109,15 +109,15 @@
 
               <!-- Description -->
               <v-col cols="12">
-                <validation-provider v-slot="{ errors }" name="描述" rules="required">
+                <validation-provider v-slot="{ errors }" name="描述" rules="required|max:300">
                   <v-textarea
                     v-model="item.description"
                     label="描述"
                     placeholder="让买家对你的东西有更好的认识"
                     outlined
+                    :counter="300"
                     autocomplete="off"
                     :loading="loading"
-                    :hide-details="!errors.length"
                     :error-messages="errors"
                   ></v-textarea>
                 </validation-provider>

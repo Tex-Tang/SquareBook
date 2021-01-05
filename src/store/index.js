@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 
 // Modules
 import user from './user'
+import sold from './sold'
 import items from './items'
 import posted from './posted'
 import aggregates from './aggregates'
@@ -36,6 +37,7 @@ const store = new Vuex.Store({
   },
   modules: {
     user,
+    sold,
     items,
     posted,
     aggregates,
