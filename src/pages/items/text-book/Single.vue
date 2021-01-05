@@ -1,6 +1,6 @@
 <template>
   <div class="product-page">
-    <div class="uec-book-single">
+    <div class="text-book-single">
       <v-row class="py-4" v-if="!item.uuid">
         <v-col cols="12" :md="6" :lg="4">
           <div class="md:pb-0 pb-6 w-full" style="height: 450px">
@@ -46,22 +46,18 @@
         </v-col>
         <v-col :md="6" :lg="7" cols="12">
           <div class="text-h4 font-weight-bold">{{ item.name }}</div>
-          <div class="text-h6 mt-2">来自 
-            <router-link tag="span" class="primary--text cursor-pointer" to="/">{{ item.created_by }}</router-link>
-          </div>
+          <div class="text-h6 mt-2">来自 {{ item.created_by }}</div>
           <div class="body-1 mt-4">
             {{ item.description }}
           </div>
-          <template v-if="item.category == 'uec-book'">
-            <div class="body-1 mt-4">
-              <v-icon>mdi-school</v-icon>
-              {{ placesMap()[item.properties.school] }}
-            </div>
-            <div class="body-1 mt-2 mb-3">
-              <v-icon>mdi-account-group</v-icon>
-              {{ item.properties.levels.map((level) => levels.find(({ value }) => value === level ).title).join("•") }}
-            </div>
-          </template>
+          <div class="body-1 mt-4">
+            <v-icon>mdi-school</v-icon>
+            {{ placesMap()[item.properties.school] }}
+          </div>
+          <div class="body-1 mt-2 mb-3">
+            <v-icon>mdi-account-group</v-icon>
+            {{ item.properties.levels.map((level) => levels.find(({ value }) => value === level ).title).join("•") }}
+          </div>
           <div class="mt-2">
             <div class="body-1 grey--text">面交地区</div>
             <v-chip
@@ -82,28 +78,40 @@
             >{{ placesMap()[place] }}</v-chip>
             <div class="body-1 mt-2" v-if="!item.post_delivery.length">无法提供邮寄服务</div>
           </div>
+          <div class="mt-3">
+            <div class="body-1 grey--text mb-1">联系卖家</div>
+            <div class="flex">
+              <div @click="contact('whatsapp', item.uuid)" v-if="item.contact.whatsapp" class="text-decoration-none cursor-pointer mr-2">
+                <v-icon class="text-h4 grey--text text--darken-3 black--text">mdi-whatsapp</v-icon>
+              </div>
+              <div @click="contact('facebook', item.uuid)" v-if="item.contact.facebook" class="text-decoration-none cursor-pointer mr-2">
+                <v-icon class="text-h4 grey--text text--darken-3 black--text">mdi-facebook</v-icon>
+              </div>
+              <div @click="contact('instagram', item.uuid)" v-if="item.contact.instagram" class="text-decoration-none cursor-pointer">
+                <v-icon class="text-h4 grey--text text--darken-3 black--text">mdi-instagram</v-icon>
+              </div>
+            </div>
+          </div>
         </v-col>
         <v-col cols="12">
-          <template v-if="item.category == 'uec-book'">
-            <div class="white pa-3 py-5 bordered">
-              <div class="title ml-3">书单</div>
-              <v-data-table
-                :headers="headers"
-                :items="item.content"
-                hide-default-footer
-              >
-                <template v-slot:item.publisher="{ item }">
-                  {{ item.properties.publisher }}
-                </template>
-                <template v-slot:item.year="{ item }">
-                  {{ item.properties.year }}
-                </template>
-                <template v-slot:item.condition="{ item }">
-                  {{ conditions.find(({id}) => id == item.properties.condition).title }}
-                </template>
-              </v-data-table>
-            </div>
-          </template>
+          <div class="white pa-3 py-5 bordered">
+            <div class="title ml-3">书单</div>
+            <v-data-table
+              :headers="headers"
+              :items="item.content"
+              hide-default-footer
+            >
+              <template v-slot:item.publisher="{ item }">
+                {{ item.properties.publisher }}
+              </template>
+              <template v-slot:item.year="{ item }">
+                {{ item.properties.year }}
+              </template>
+              <template v-slot:item.condition="{ item }">
+                {{ conditions.find(({value}) => value == item.properties.condition).title }}
+              </template>
+            </v-data-table>
+          </div>
         </v-col>
       </v-row>
     </div>
@@ -116,6 +124,7 @@ import 'swiper/swiper-bundle.css';
 import { mapState } from 'vuex';
 import { levels } from '../../../enum/levels.enum'
 import { conditions } from '../../../enum/text-book.enum'
+import { getContact } from '../../../api/item';
 
 export default {
   data: () => ({
@@ -167,6 +176,16 @@ export default {
       }
     })
   },
+  methods: {
+    contact (method, uuid) {
+      getContact(method, uuid).then(({ data }) => {
+        if (data.result) {
+          var win = window.open(data.data, '_blank');
+          win.focus();
+        }
+      })
+    }
+  }
 }
 </script>
 

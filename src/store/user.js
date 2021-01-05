@@ -7,7 +7,8 @@ export default {
       name: "",
       email: "",
       status: null,
-      avatar: null
+      avatar: null,
+      properties: null
     }
   }),
   getters: {
@@ -19,6 +20,7 @@ export default {
       state.user.email = data.email
       state.user.avatar = data.avatar
       state.user.status = data.status
+      state.user.properties = data.properties
     },
     reset(state) {
       state.user.name = state.user.email = ""

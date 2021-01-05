@@ -1,29 +1,23 @@
-import { getItemById, getItems } from '../api/item'
+import { getItemById, getItems } from '../api/sold'
 
 export default {
   namespaced: true,
   state: () => ({
     items: [],
-    pagination: {},
     selectedItem: {}
   }),
   mutations: {
     set(state, data) {
-      state.items = data.data
-      state.pagination = {
-        total: data.meta.total,
-        perPage: data.meta.per_page,
-        lastPage: data.meta.last_page
-      }
+      state.items = data
     },
     setSelected(state, data) {
       state.selectedItem = data
     }
   },
   actions: {
-    getAll ({ commit }, search) {
+    getAll ({ commit }) {
       return new Promise((resolve) => {
-        getItems(search).then(({ data }) => {
+        getItems().then(({ data }) => {
           if (data.result) {
             commit('set', data.data)
             resolve(data)

@@ -31,6 +31,16 @@ export function updateItem(data) {
   })
 }
 
+export function soldItem(uuid) {
+  return request({
+    url: '/posted/item/sold',
+    method: 'POST',
+    data: {
+      uuid,
+    }
+  })
+}
+
 export function deleteItem(uuid) {
   return request({
     url: '/posted/item/' + uuid,
