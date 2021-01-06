@@ -111,11 +111,11 @@
 export default{
   data: () => ({
     user: {
-      name: "Test",
-      email: "test@gmail.com",
+      name: "",
+      email: "",
       agreement: true,
-      password: "Test1234",
-      password_confirmation: "Test1234",
+      password: "",
+      password_confirmation: "",
     },
     tab: 1,
     errors: [],

@@ -99,30 +99,31 @@ export default {
   methods: {
     submit () {
       this.$store.dispatch('loading', true)
-      updateProfile({
+      this.$store.dispatch('user/updateProfie', {
         name: this.profile.name,
         email: this.profile.email,
         contact: this.contact
-      }).then((res) => {
-        if (res.data.result) {
+      }).then((data) => {
+        if (data.result) {
           this.$store.dispatch('alert', {
             type: 'success',
             message: '修改成功',
           })
           this.$router.push("/")
-          getProfile().then(({ data }) => {
-            if (data.result === true) {
-              this.$store.commit('user/set', data.data)
-            }
-            this.$store.dispatch('loading', false)
-          })
         } else {
-          this.$store.dispatch('alert', {
-            type: 'error',
-            message: '发生错误',
-          })
-          this.$store.dispatch('loading', false)
+          if (data.data.email) {
+            this.$store.dispatch('alert', {
+              type: 'error',
+              message: '邮箱已占用',
+            })
+          } else {
+            this.$store.dispatch('alert', {
+              type: 'error',
+              message: '发生错误',
+            })
+          }
         }
+        this.$store.dispatch('loading', false)
       })
     }
   },
