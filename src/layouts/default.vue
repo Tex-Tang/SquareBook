@@ -16,7 +16,7 @@
                 color="primary"
                 size="36"
               >
-                <span class="white--text headline">T</span>
+                <span class="white--text headline">{{ user().name[0] }}</span>
               </v-avatar>
             </v-btn>
           </template>

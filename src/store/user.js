@@ -29,7 +29,7 @@ export default {
   },
   actions: {
     register(context, data) {
-      return new Promise((resolve) => {x
+      return new Promise((resolve) => {
         register(data).then(({ data }) => {
           resolve(data)
         }).catch((err) => {
