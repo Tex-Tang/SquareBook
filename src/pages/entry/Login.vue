@@ -72,8 +72,8 @@
 export default{
   data: () => ({
     user: {
-      email: "test@gmail.com",
-      password: "Test1234",
+      email: "",
+      password: "",
       remember: false
     },
     errors: [],

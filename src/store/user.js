@@ -1,4 +1,4 @@
-import { register, login, logout } from '../api/auth'
+import { register, login, logout, updateProfile } from '../api/auth'
 
 export default {
   namespaced: true,
@@ -37,7 +37,7 @@ export default {
         })
       })
     },
-    async login({ commit }, data) {
+    login({ commit }, data) {
       return new Promise((resolve) => {
         login(data).then(({ data }) => {
           if (data.result) {
@@ -51,7 +51,21 @@ export default {
         })
       })
     },
-    async logout({ commit }, data) {
+    updateProfie({ commit }, data) {
+      return new Promise((resolve) => {
+        updateProfile(data).then(({ data }) => {
+          if (data.result) {
+            commit('set', data.data)
+            resolve(data)
+          } else {
+            resolve(data)
+          }
+        }).catch((err) => {
+          resolve({ result: false, data: err.response.data.errors })
+        })
+      })
+    },
+    logout({ commit }, data) {
       return new Promise((resolve) => {
         logout().then(({ data }) => {
           resolve(true)
