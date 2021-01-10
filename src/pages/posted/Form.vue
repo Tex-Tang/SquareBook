@@ -306,6 +306,11 @@ export default {
               message: "成功创建物品，预祝早日找到新主人。"
             })
             this.$router.push({ name: 'posted' })
+          } else {
+            this.$store.dispatch('alert', {
+              type: "error",
+              messages: JSON.stringify(data)
+            })
           }
           this.$store.dispatch('loading', false)
         })
@@ -317,6 +322,11 @@ export default {
               message: "成功编辑物品，预祝早日找到新主人。"
             })
             this.$router.push({ name: 'posted' })
+          } else {
+            this.$store.dispatch('alert', {
+              type: "error",
+              messages: JSON.stringify(data)
+            })
           }
           this.$store.dispatch('loading', false)
         })
