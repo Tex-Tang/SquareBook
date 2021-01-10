@@ -109,7 +109,7 @@
 
               <!-- Description -->
               <v-col cols="12">
-                <validation-provider v-slot="{ errors }" name="描述" rules="required|max:300">
+                <validation-provider v-slot="{ errors }" name="描述" rules="required">
                   <v-textarea
                     v-model="item.description"
                     label="描述"
