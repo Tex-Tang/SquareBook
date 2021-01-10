@@ -53,10 +53,10 @@
               </v-col>
               <!-- Title -->
               <v-col cols="12" :sm="8">
-                <validation-provider v-slot="{ errors }" name="标题" rules="required|max:20">
+                <validation-provider v-slot="{ errors }" name="标题" rules="required|max:50">
                   <v-text-field
                     v-model="item.name"
-                    :counter="20"
+                    :counter="50"
                     label="标题"
                     placeholder="取个吸引人的标题吧！"
                     outlined
