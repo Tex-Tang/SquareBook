@@ -115,7 +115,6 @@
                     label="描述"
                     placeholder="让买家对你的东西有更好的认识"
                     outlined
-                    :counter="300"
                     autocomplete="off"
                     :loading="loading"
                     :error-messages="errors"
